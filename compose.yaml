@@ -1,0 +1,27 @@
+services:
+  database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: taskflow
+      POSTGRES_USER: taskflow
+      POSTGRES_PASSWORD: ${TASKFLOW_DB_PASSWORD:?Set TASKFLOW_DB_PASSWORD in your shell}
+    volumes:
+      - taskflow-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskflow -d taskflow"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:5080:8080"
+    environment:
+      Database__Provider: Postgres
+      ConnectionStrings__Postgres: Host=database;Database=taskflow;Username=taskflow;Password=${TASKFLOW_DB_PASSWORD}
+      AllowedHosts: localhost;127.0.0.1
+    depends_on:
+      database:
+        condition: service_healthy
+volumes:
+  taskflow-data:

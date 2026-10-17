@@ -1,0 +1,9 @@
+.tools/
+**/bin/
+**/obj/
+**/node_modules/
+**/App_Data/
+**/TestResults/
+*.user
+.env
+artifacts/

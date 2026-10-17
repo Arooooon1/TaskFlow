@@ -1,0 +1,7 @@
+.tools
+**/bin
+**/obj
+**/node_modules
+**/App_Data
+.git
+artifacts

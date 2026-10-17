@@ -1,0 +1,37 @@
+@base = http://127.0.0.1:5080
+
+### Readiness (checks database)
+GET {{base}}/api/health
+
+### Paginated list
+GET {{base}}/api/items?page=1&pageSize=12&sort=priority
+
+### Workspace aggregation (TPL)
+GET {{base}}/api/workspace
+
+### Create
+POST {{base}}/api/items
+Content-Type: application/json
+
+{
+  "title": "Review API documentation",
+  "description": "Check requests, errors and example responses.",
+  "priority": "Medium",
+  "assigneeId": 1,
+  "dueDate": "2026-10-25"
+}
+
+### Copy id and version from the created response before calling PATCH
+PATCH {{base}}/api/items/1/status
+Content-Type: application/json
+
+{
+  "status": "InProgress",
+  "version": "00000000-0000-0000-0000-000000000000"
+}
+
+### History
+GET {{base}}/api/items/1/history
+
+### Export
+GET {{base}}/api/reports/export
